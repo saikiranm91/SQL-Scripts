@@ -24,30 +24,30 @@ CREATE PROCEDURE [dbo].[usp_ErrorNotification]
     AS
     BEGIN
 
-	-- =============================================
-	-- Author		:	Sai Kiran Mirdoddi
-	-- Contact		:	
+	-- =======================================================================================================================================
+	-- Author	:	Sai Kiran Mirdoddi
+	-- Contact	:	
 	-- Create date	:	07/03/2018
 	-- Description	:	HTML formatted mail to send SQL Agent job failure alerts
-	--					Currently supports errors from SQL Steps
-	--					Exception/Error messages from SSIS Packages deployed to SSISDB Catalog
-	--					Sproc uses Job Token's as parameters. These will work when executed from the context of SQL Agent job step.
-	--					Read more at <blog link>
-	--					Database Mail profile should be created and Profile Name should be replaced in the parameters
+	--			Currently supports errors from SQL Steps
+	--			Exception/Error messages from SSIS Packages deployed to SSISDB Catalog
+	--			Sproc uses Job Token's as parameters. These will work when executed from the context of SQL Agent job step.
+	--			Read more at <blog link>
+	--			Database Mail profile should be created and Profile Name should be replaced in the parameters
 	-- Usage
 	/* 
 		-- Query should be placed in the last step for the job. 
 		-- Step should be reached upon failure of preceding steps
 		-- This step should fail the job upon its success.
 
-    EXEC [dbo].[usp_ErrorNotification]
-        @job_id = $(ESCAPE_SQUOTE(JOBID))
-        ,@run_date = $(ESCAPE_NONE(STRTDT))
-        ,@run_time = $(ESCAPE_NONE(STRTTM))
-        ,@recipients = 'alerts@gmail.com'
-        ,@ProfileName = 'PROFNAME'
+		    EXEC [dbo].[usp_ErrorNotification]
+			@job_id = $(ESCAPE_SQUOTE(JOBID))
+			,@run_date = $(ESCAPE_NONE(STRTDT))
+			,@run_time = $(ESCAPE_NONE(STRTTM))
+			,@recipients = 'alerts@gmail.com'
+			,@ProfileName = 'PROFNAME'
     */
-	-- =============================================
+	-- =======================================================================================================================================
 	
     DECLARE @EmailSubject    VARCHAR(200) = ''
     DECLARE @HtmlContent    NVARCHAR(MAX) = ''
@@ -55,7 +55,7 @@ CREATE PROCEDURE [dbo].[usp_ErrorNotification]
     DECLARE @footer            VARCHAR(max) = ''
     DECLARE @Content        VARCHAR(max) = ''
     DECLARE @JobName        VARCHAR(max) = ''
-	DECLARE @TZ varchar(6)
+    DECLARE @TZ varchar(6)
 
 	SELECT TOP 1 @TZ = DATENAME(tz,created_time) FROM SSISDB.internal.folders
 	
